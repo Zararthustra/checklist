@@ -1,7 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const Category = sequelize.define("Category", {
     name: {
-      allowNull: false,
       type: Sequelize.STRING
     }
   });

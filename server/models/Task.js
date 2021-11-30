@@ -1,7 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const Task = sequelize.define("Task", {
     name: {
-      allowNull: false,
       type: Sequelize.STRING
     }
   });
