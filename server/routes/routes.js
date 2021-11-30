@@ -35,6 +35,7 @@ router.post("/user", (req, res) => {
   db.User.findOrCreate({
     where: {
       name: name,
+      password: password,
     },
   }).then((creationStatus) => {
     if (creationStatus[1]) res.json(creationStatus[0]);
