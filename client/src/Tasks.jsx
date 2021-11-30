@@ -5,7 +5,7 @@ import "./App.css";
 
 const Tasks = ({ category, onDeleteCategory }) => {
   // Variables
-  const dev = true;
+  const dev = false;
   const localHost = dev ? "http://localhost:3001/" : "/";
 
   const [tasks, setTasks] = useState([]);

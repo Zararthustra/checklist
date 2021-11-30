@@ -2,8 +2,8 @@
   "development": {
     "username": "root",
     "password": "viveleschips",
-    "database": "checklist3",
-    "host": "127.0.0.1",
+    "database": "checklist",
+    "host": "15.237.116.88",
     "dialect": "mysql"
   },
   "test": {

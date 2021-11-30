@@ -5,7 +5,7 @@ import Tasks from "./Tasks";
 
 const App = () => {
   // Variables
-  const dev = true;
+  const dev = false;
   const localHost = dev ? "http://localhost:3001/" : "/";
 
   const [categories, setCategories] = useState([]);
