@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "viveleschips",
+    "database": "checklist3",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "viveleschips",
+    "database": "checklist_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "viveleschips",
+    "database": "checklist_prod",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
