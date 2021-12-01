@@ -13,7 +13,7 @@
   border-radius: 10px;
   background-color: rgb(32, 32, 54);
   box-shadow: 1em 1em 6em 1em #f72585, 0em 0em 0.5em 0em #e1fbff,
-  -1em -1em 5em 1em #3a0ca3;
+    -1em -1em 5em 1em #3a0ca3;
 }
 .connexion {
   color: #9fe6ff;
@@ -42,23 +42,12 @@ input:focus {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  width: 15ch;
-}
-
-.register {
-  position: absolute;
-  top: 5px;
-  right: 2px;
-  cursor: pointer;
-  border: none;
-  color: #f72585;
-  text-decoration: underline;
-  background-color: rgb(32, 32, 54);
 }
 
 .loginDiv {
   display: flex;
   justify-content: center;
+  gap: 1em;
 }
 .login {
   box-shadow: 3px 3px 10px -5px black;
@@ -71,7 +60,17 @@ input:focus {
   padding: 0.4em 1em;
   border-radius: 25px;
 }
-
+.register {
+  box-shadow: 3px 3px 10px -5px black;
+  font-weight: bolder;
+  margin-top: 1em;
+  color: #3a0ca3;
+  background-color: #9fe6ff;
+  border: none;
+  cursor: pointer;
+  padding: 0.4em 1em;
+  border-radius: 25px;
+}
 /*
 ** App
 */
@@ -187,7 +186,6 @@ img {
   padding: 0.4em 1.5em;
   border-radius: 0 0 5px 5px;
 }
-
 
 .App-logo {
   height: 40vmin;

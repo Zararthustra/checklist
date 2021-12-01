@@ -97,7 +97,7 @@ const Tasks = ({ category, onDeleteCategory }) => {
           className="inputTask"
           type="text"
           placeholder=""
-          maxLength="17"
+          maxLength="20"
           value={taskInput}
           onChange={handleTaskChange}
         ></input>

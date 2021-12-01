@@ -49,7 +49,8 @@ const App = () => {
     }
 
     if (password === "") {
-      document.getElementsByClassName("inputPassword")[0].placeholder = "Entrer un mdp";
+      document.getElementsByClassName("inputPassword")[0].placeholder =
+        "Entrer un mdp";
       return;
     }
 
@@ -154,7 +155,7 @@ const App = () => {
         <form className="form formCategory">
           <input
             className="inputCategory"
-            maxLength="15"
+            maxLength="20"
             placeholder=""
             type="text"
             value={newCategory}
@@ -173,6 +174,7 @@ const App = () => {
         <form className="logform">
           <div className="inputs">
             <input
+              maxLength="20"
               placeholder="Nom"
               className="inputName"
               type="text"
@@ -180,6 +182,7 @@ const App = () => {
               onChange={handleUserChange}
             ></input>
             <input
+              maxLength="20"
               placeholder="Mot de passe"
               className="inputPassword"
               type="text"
@@ -191,10 +194,10 @@ const App = () => {
             <button onClick={logUser} className="login">
               Connecter
             </button>
+            <button onClick={addUser} className="register">
+              Créer
+            </button>
           </div>
-          <button onClick={addUser} className="register">
-            Créer
-          </button>
         </form>
       </div>
     );
