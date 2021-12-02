@@ -14,12 +14,19 @@ const App = () => {
     password: "",
     id: 0,
   });
+  //    Local storage
+  const userNameLocalStorage = localStorage.getItem("username");
+  const passwordLocalStorage = localStorage.getItem("password");
   //    Inputs
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState(
+    userNameLocalStorage !== null ? userNameLocalStorage : ""
+  );
+  const [password, setPassword] = useState(
+    passwordLocalStorage !== null ? passwordLocalStorage : ""
+  );
   const [newCategory, setNewCategory] = useState("");
 
-  // Load data when mounting (when userObject change)
+  // Load data when mounting
   useEffect(() => {
     Axios.get(`${localHost}apiroutes/${userObject.id}/category`).then((res) => {
       const categoriesArray = res.data;
@@ -95,13 +102,15 @@ const App = () => {
         password: response.data.password,
         id: response.data.id,
       });
+      localStorage.setItem("username", userName);
+      localStorage.setItem("password", password);
     } else {
       document.getElementsByClassName("inputName")[0].placeholder = "Mauvaise";
       document.getElementsByClassName("inputPassword")[0].placeholder =
         "Combinaison";
+      setPassword("");
+      setUserName("");
     }
-    setPassword("");
-    setUserName("");
   }
 
   //__________________________________________________Category functions
