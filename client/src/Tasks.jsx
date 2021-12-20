@@ -3,9 +3,9 @@ import Axios from "axios";
 import icon from "./assets/delete.png";
 import "./App.css";
 
-const Tasks = ({ category, onDeleteCategory }) => {
+export const Tasks = ({ category, onDeleteCategory }) => {
   // Variables
-  const dev = false;
+  const dev = true;
   const localHost = dev ? "http://localhost:3001/" : "/";
 
   const [tasks, setTasks] = useState([]);
@@ -75,6 +75,7 @@ const Tasks = ({ category, onDeleteCategory }) => {
       <div className="catimg">
         <h1 className="categoryName">{category.name}</h1>
         <img
+          className="delete"
           src={icon}
           alt="delete icon"
           onClick={() => onDeleteCategory(category.id)}
@@ -108,5 +109,3 @@ const Tasks = ({ category, onDeleteCategory }) => {
     </div>
   );
 };
-
-export default Tasks;

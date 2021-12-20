@@ -1,11 +1,11 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import Axios from "axios";
-import Tasks from "./Tasks";
+import { Tasks } from "./Tasks";
 
-const App = () => {
+export const App = () => {
   // Variables
-  const dev = false;
+  const dev = true;
   const localHost = dev ? "http://localhost:3001/" : "/";
 
   const [categories, setCategories] = useState([]);
@@ -25,6 +25,7 @@ const App = () => {
     passwordLocalStorage !== null ? passwordLocalStorage : ""
   );
   const [newCategory, setNewCategory] = useState("");
+  
 
   // Load data when mounting
   useEffect(() => {
@@ -34,6 +35,7 @@ const App = () => {
     });
   }, [userObject, localHost]);
 
+  
   //__________________________________________________User functions
 
   const handleUserChange = (event) => {
@@ -211,5 +213,3 @@ const App = () => {
       </div>
     );
 };
-
-export default App;

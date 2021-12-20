@@ -1,6 +1,6 @@
 {
   "development": {
-    "username": "arthy",
+    "username": "root",
     "password": "viveleschips",
     "database": "checklist",
     "host": "127.0.0.1",
