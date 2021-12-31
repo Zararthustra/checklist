@@ -4,12 +4,63 @@ const db = require("../models");
 const { Op } = require("sequelize");
 const cors = require("cors");
 
-//______________________________SetUp__________________________________
+//______________________________SetUp__________________________
 
 router.use(express.json());
 router.use(cors());
 
+//______________________________JWT Strategy___________________
+
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const clientSecret = process.env.CLIENT_SECRET;
+
+const createAccessToken = (user) => {
+  return jwt.sign(user, clientSecret, { expiresIn: "1d" });
+};
+
+const authenticateAccessToken = (req, res, next) => {
+  const accessToken = req.body.token;
+
+  if (!accessToken) res.sendStatus(401);
+
+  jwt.verify(accessToken, clientSecret, (err, data) => {
+    if (err) res.sendStatus(401);
+    data.userValidated.token = accessToken
+    req.data = data.userValidated; //miss accesstoken 
+    next();
+  });
+};
+
 //______________________________User___________________________
+
+// Check by token
+router.post("/user/loginbytoken", authenticateAccessToken, (req, res) => {
+  res.send(req.data);
+});
+
+// Check without token
+router.post("/user/login", (req, res) => {
+  const name = req.body.name;
+  const password = req.body.password;
+
+  db.User.findOne({
+    where: {
+      name: name,
+      password: password,
+    },
+  }).then((userValidated) => {
+    if (!userValidated) res.status(401).send("Wrong credentials");
+    const accessToken = createAccessToken({ userValidated });
+
+    res.send({
+      id: userValidated.id,
+      name: userValidated.name,
+      password: userValidated.password,
+      accessToken: accessToken,
+    });
+  });
+});
 
 // Retrieve all
 router.get("/user", (req, res) => {
@@ -41,19 +92,6 @@ router.post("/user", (req, res) => {
     if (creationStatus[1]) res.json(creationStatus[0]);
     else res.send(creationStatus[1]);
   });
-});
-
-// Check Exist
-router.post("/user/login", (req, res) => {
-  const name = req.body.name;
-  const password = req.body.password;
-
-  db.User.findOne({
-    where: {
-      name: name,
-      password: password,
-    },
-  }).then((userValidated) => res.json(userValidated));
 });
 
 //______________________________Category___________________________

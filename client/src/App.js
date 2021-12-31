@@ -13,8 +13,10 @@ export const App = () => {
     name: "",
     password: "",
     id: 0,
+    token: "",
   });
   //    Local storage
+  const tokenLocalStorage = localStorage.getItem("token");
   const userNameLocalStorage = localStorage.getItem("username");
   const passwordLocalStorage = localStorage.getItem("password");
   //    Inputs
@@ -25,7 +27,6 @@ export const App = () => {
     passwordLocalStorage !== null ? passwordLocalStorage : ""
   );
   const [newCategory, setNewCategory] = useState("");
-  
 
   // Load data when mounting
   useEffect(() => {
@@ -35,7 +36,6 @@ export const App = () => {
     });
   }, [userObject, localHost]);
 
-  
   //__________________________________________________User functions
 
   const handleUserChange = (event) => {
@@ -88,24 +88,42 @@ export const App = () => {
       name: "",
       password: "",
       id: 0,
+      token: "",
     });
   };
 
   async function logUser(event) {
     event.preventDefault();
+    const token = tokenLocalStorage;
+    let response = {};
+    const isLocalToken =
+      tokenLocalStorage &&
+      tokenLocalStorage !== "" &&
+      tokenLocalStorage !== "undefined";
 
-    const response = await Axios.post(`${localHost}apiroutes/user/login`, {
-      name: userName,
-      password: password,
-    });
+    if (isLocalToken) {
+      response = await Axios.post(`${localHost}apiroutes/user/loginbytoken`, {
+        token: token,
+      });
+    } else if (!isLocalToken) {
+      response = await Axios.post(`${localHost}apiroutes/user/login`, {
+        name: userName,
+        password: password,
+      });
+    }
     if (response.data) {
       setUserObject({
         name: response.data.name,
         password: response.data.password,
         id: response.data.id,
+        token: response.data.accessToken || response.data.token,
       });
       localStorage.setItem("username", userName);
       localStorage.setItem("password", password);
+      localStorage.setItem(
+        "token",
+        response.data.accessToken || response.data.token
+      );
     } else {
       document.getElementsByClassName("inputName")[0].placeholder = "Mauvaise";
       document.getElementsByClassName("inputPassword")[0].placeholder =
