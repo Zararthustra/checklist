@@ -5,7 +5,7 @@ import { Tasks } from "./Tasks";
 
 export const App = () => {
   // Variables
-  const dev = true;
+  const dev = false;
   const localHost = dev ? "http://localhost:3001/" : "/";
 
   const [categories, setCategories] = useState([]);
@@ -90,11 +90,11 @@ export const App = () => {
       id: 0,
       token: "",
     });
+    localStorage.setItem("token", "");
   };
 
   async function logUser(event) {
     event.preventDefault();
-    const token = tokenLocalStorage;
     let response = {};
     const isLocalToken =
       tokenLocalStorage &&
@@ -103,7 +103,7 @@ export const App = () => {
 
     if (isLocalToken) {
       response = await Axios.post(`${localHost}apiroutes/user/loginbytoken`, {
-        token: token,
+        token: tokenLocalStorage,
       });
     } else if (!isLocalToken) {
       response = await Axios.post(`${localHost}apiroutes/user/login`, {
@@ -214,7 +214,7 @@ export const App = () => {
               maxLength="20"
               placeholder="Mot de passe"
               className="inputPassword"
-              type="text"
+              type="password"
               value={password}
               onChange={handlePasswordChange}
             ></input>

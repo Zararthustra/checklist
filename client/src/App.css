@@ -104,6 +104,7 @@ input:focus {
 }
 .catimg {
   position: relative;
+  left: -1em
 }
 .category {
   margin: 1em 0 1em;
@@ -121,8 +122,8 @@ input:focus {
 
 .formCategory {
   box-shadow: 3px 3px 25px -7px black;
-  margin: 2em;
-  width: 60vw;
+  margin: 2em 0;
+  width: 90%;
 }
 .inputCategory {
   border-radius: 5px 5px 0 0;
@@ -148,7 +149,7 @@ input:focus {
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 50vw;
+  width: 90%;
 }
 .task:nth-child(1) {
   border-top-right-radius: 25px;
@@ -160,7 +161,7 @@ input:focus {
 }
 .task {
   box-shadow: 0px 0px 50px -10px white;
-  padding: 0.3em;
+  padding: 1.5em 0.5em;
   width: 50vw;
   border: none;
   margin: 0.1em;
@@ -172,7 +173,7 @@ input:focus {
 
 .formTask {
   margin-top: 0em;
-  width: 50vw;
+  width: 90%;
   box-shadow: 3px 3px 25px -7px black;
 }
 .inputTask {
@@ -189,17 +190,6 @@ input:focus {
   border-radius: 0 0 5px 5px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -213,13 +203,4 @@ input:focus {
 
 .App-link {
   color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

@@ -5,7 +5,7 @@ import "./App.css";
 
 export const Tasks = ({ category, onDeleteCategory }) => {
   // Variables
-  const dev = true;
+  const dev = false;
   const localHost = dev ? "http://localhost:3001/" : "/";
 
   const [tasks, setTasks] = useState([]);
@@ -98,7 +98,7 @@ export const Tasks = ({ category, onDeleteCategory }) => {
           className="inputTask"
           type="text"
           placeholder=""
-          maxLength="20"
+          maxLength="33"
           value={taskInput}
           onChange={handleTaskChange}
         ></input>
