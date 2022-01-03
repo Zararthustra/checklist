@@ -26,3 +26,7 @@ __Technologies utilisée:__
 * Json Web Token
 * Sequelize
 * MySQL
+
+*Astuce:*
+
+*Sur mobile, ne pas hésiter à l'ajouter à l'écran d'accueil pour y accèder plus facilement !*
