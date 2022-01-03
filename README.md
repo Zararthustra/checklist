@@ -8,8 +8,11 @@ pour ne pas oublier ce qu'il reste à faire !
 </p>
 </b>
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/70105093/144498880-9b787241-ebfb-412c-a5bd-fe0cb380d0d8.png">
-</p>  
+  <img src="https://user-images.githubusercontent.com/70105093/147940590-02fcd59e-cf5b-4e65-aba9-d59f7f5f244d.png" width="300px">
+</p>
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/70105093/147944974-f9a6a296-4806-4832-bd6b-c1bf150c1f9e.png" width="300px">
+</p>
 
 
 __Technologies utilisée:__
@@ -20,5 +23,6 @@ __Technologies utilisée:__
 * JavaScript
 * Node
 * Express
+* Json Web Token
 * Sequelize
 * MySQL
