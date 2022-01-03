@@ -16,8 +16,14 @@ const jwt = require("jsonwebtoken");
 const clientSecret = process.env.CLIENT_SECRET;
 
 const createAccessToken = (user) => {
-  return jwt.sign(user, clientSecret, { expiresIn: "1d" });
+  return jwt.sign(user, clientSecret);
 };
+
+const isAdmin = (req, res, next) => {
+  const adminSecret = req.headers['admin-secret'];
+  if (adminSecret === process.env.ADMIN_SECRET) return next()
+  return res.sendStatus(403);
+}
 
 const authenticateAccessToken = (req, res, next) => {
   const accessToken = req.body.token;
@@ -26,20 +32,15 @@ const authenticateAccessToken = (req, res, next) => {
 
   jwt.verify(accessToken, clientSecret, (err, data) => {
     if (err) res.sendStatus(401);
-    data.userValidated.token = accessToken
-    req.data = data.userValidated; //miss accesstoken 
+    data.userValidated.token = accessToken;
+    req.data = data.userValidated;
     next();
   });
 };
 
 //______________________________User___________________________
 
-// Check by token
-router.post("/user/loginbytoken", authenticateAccessToken, (req, res) => {
-  res.send(req.data);
-});
-
-// Check without token
+// Check existing account
 router.post("/user/login", (req, res) => {
   const name = req.body.name;
   const password = req.body.password;
@@ -50,27 +51,28 @@ router.post("/user/login", (req, res) => {
       password: password,
     },
   }).then((userValidated) => {
-    if (!userValidated) res.status(401).send("Wrong credentials");
-    const accessToken = createAccessToken({ userValidated });
-
-    res.send({
-      id: userValidated.id,
-      name: userValidated.name,
-      password: userValidated.password,
-      accessToken: accessToken,
-    });
+    if (!userValidated) res.send("Wrong credentials");
+    else {
+      const accessToken = createAccessToken({ userValidated });
+      res.send({
+        id: userValidated.id,
+        name: userValidated.name,
+        password: userValidated.password,
+        accessToken: accessToken,
+      });
+    }
   });
 });
 
 // Retrieve all
-router.get("/user", (req, res) => {
+router.get("/user", isAdmin, (req, res) => {
   db.User.findAll({
     order: [["createdAt", "DESC"]],
   }).then((users) => res.json(users));
 });
 
 // Retrieve one
-router.get("/user/:id", (req, res) => {
+router.get("/user/:id", isAdmin, (req, res) => {
   db.User.findOne({
     where: {
       id: req.params.id,
@@ -89,8 +91,16 @@ router.post("/user", (req, res) => {
       password: password,
     },
   }).then((creationStatus) => {
-    if (creationStatus[1]) res.json(creationStatus[0]);
-    else res.send(creationStatus[1]);
+    if (creationStatus[1]) {
+      const createdUser = creationStatus[0];
+      const accessToken = createAccessToken({ createdUser });
+      res.send({
+        id: createdUser.id,
+        name: createdUser.name,
+        password: createdUser.password,
+        accessToken: accessToken,
+      });
+    } else res.send(creationStatus[1]);
   });
 });
 
@@ -108,7 +118,7 @@ router.get("/:user/category", (req, res) => {
 });
 
 // Create
-router.post("/category", (req, res) => {
+router.post("/category", authenticateAccessToken, (req, res) => {
   const name = req.body.name;
   const userId = req.body.userId;
 

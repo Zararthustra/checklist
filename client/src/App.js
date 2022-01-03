@@ -17,6 +17,10 @@ export const App = () => {
   });
   //    Local storage
   const tokenLocalStorage = localStorage.getItem("token");
+  const isLocalToken =
+    tokenLocalStorage &&
+    tokenLocalStorage !== "" &&
+    tokenLocalStorage !== "undefined";
   const userNameLocalStorage = localStorage.getItem("username");
   const passwordLocalStorage = localStorage.getItem("password");
   //    Inputs
@@ -73,7 +77,11 @@ export const App = () => {
         name: response.data.name,
         password: response.data.password,
         id: response.data.id,
+        token: response.data.accessToken,
       });
+      localStorage.setItem("username", userName);
+      localStorage.setItem("password", password);
+      localStorage.setItem("token", response.data.accessToken);
     } else {
       document.getElementsByClassName("inputName")[0].placeholder =
         "Existe déjà !";
@@ -90,46 +98,33 @@ export const App = () => {
       id: 0,
       token: "",
     });
-    localStorage.setItem("token", "");
+    localStorage.clear();
   };
 
   async function logUser(event) {
     event.preventDefault();
-    let response = {};
-    const isLocalToken =
-      tokenLocalStorage &&
-      tokenLocalStorage !== "" &&
-      tokenLocalStorage !== "undefined";
 
-    if (isLocalToken) {
-      response = await Axios.post(`${localHost}apiroutes/user/loginbytoken`, {
-        token: tokenLocalStorage,
-      });
-    } else if (!isLocalToken) {
-      response = await Axios.post(`${localHost}apiroutes/user/login`, {
-        name: userName,
-        password: password,
-      });
-    }
-    if (response.data) {
-      setUserObject({
-        name: response.data.name,
-        password: response.data.password,
-        id: response.data.id,
-        token: response.data.accessToken || response.data.token,
-      });
-      localStorage.setItem("username", userName);
-      localStorage.setItem("password", password);
-      localStorage.setItem(
-        "token",
-        response.data.accessToken || response.data.token
-      );
-    } else {
+    const response = await Axios.post(`${localHost}apiroutes/user/login`, {
+      name: userName,
+      password: password,
+    });
+
+    if (response.data === "Wrong credentials") {
       document.getElementsByClassName("inputName")[0].placeholder = "Mauvaise";
       document.getElementsByClassName("inputPassword")[0].placeholder =
         "Combinaison";
       setPassword("");
       setUserName("");
+    } else {
+      setUserObject({
+        name: response.data.name,
+        password: response.data.password,
+        id: response.data.id,
+        token: response.data.accessToken,
+      });
+      localStorage.setItem("username", userName);
+      localStorage.setItem("password", password);
+      localStorage.setItem("token", response.data.accessToken);
     }
   }
 
@@ -146,10 +141,11 @@ export const App = () => {
     if (newCategory === "") {
       document.getElementsByClassName("inputCategory")[0].placeholder =
         "Entrer une catégorie";
-    } else {
+    } else if (isLocalToken && userObject.token === tokenLocalStorage) {
       const response = await Axios.post(`${localHost}apiroutes/category`, {
         name: newCategory,
         userId: userObject.id,
+        token: userObject.token,
       });
       setCategories([
         ...categories,
@@ -160,7 +156,7 @@ export const App = () => {
       ]);
       setNewCategory("");
       document.getElementsByClassName("inputCategory")[0].placeholder = "";
-    }
+    } else return logoutUser()
   }
 
   async function deleteCategory(categoryId) {
