@@ -4,107 +4,131 @@ import Axios from "axios";
 import { Tasks } from "./Tasks";
 
 export const App = () => {
-  // Variables
+  //__________________________________________________Set up
+
   const dev = false;
-  const localHost = dev ? "http://localhost:3001/" : "/";
+  const basePath = dev ? "http://192.168.1.6:3001/apiroutes" : "/";
 
   const [categories, setCategories] = useState([]);
-  const [userObject, setUserObject] = useState({
-    name: "",
-    password: "",
-    id: 0,
-    token: "",
-  });
-  //    Local storage
-  const tokenLocalStorage = localStorage.getItem("token");
-  const isLocalToken =
-    tokenLocalStorage &&
-    tokenLocalStorage !== "" &&
-    tokenLocalStorage !== "undefined";
-  const userNameLocalStorage = localStorage.getItem("username");
-  const passwordLocalStorage = localStorage.getItem("password");
+  const [userObject, setUserObject] = useState({});
   //    Inputs
   const [userName, setUserName] = useState(
-    userNameLocalStorage !== null ? userNameLocalStorage : ""
+    localStorage.getItem("username") !== null
+      ? localStorage.getItem("username")
+      : ""
   );
   const [password, setPassword] = useState(
-    passwordLocalStorage !== null ? passwordLocalStorage : ""
+    localStorage.getItem("password") !== null
+      ? localStorage.getItem("password")
+      : ""
   );
   const [newCategory, setNewCategory] = useState("");
 
+  // Set auth header for any type of request
+  Axios.defaults.headers.common["authorization"] = userObject.AT;
+
   // Load data when mounting
   useEffect(() => {
-    Axios.get(`${localHost}apiroutes/${userObject.id}/category`).then((res) => {
-      const categoriesArray = res.data;
-      setCategories(categoriesArray);
-    });
-  }, [userObject, localHost]);
+    if (userObject.id) {
+      Axios.get(`${basePath}/${userObject.id}/categories`)
+        .then((res) => {
+          const categoriesArray = res.data;
+          setCategories(categoriesArray);
+        })
+        .catch((error) => console.log("useEffect error."));
+    }
+  }, [userObject, basePath]);
 
-  //__________________________________________________User functions
+  //__________________________________________________JWT
+
+  const getNewToken = async () => {
+    console.log("Request for a new access token...");
+
+    const response = await Axios.post(`${basePath}/refreshAT`, {
+      refreshToken: userObject.RT,
+    });
+
+    if (!response) return console.log("Could not get new access token.");
+
+    // Set new AccessToken
+    setUserObject({
+      ...userObject,
+      AT: response.data.accessToken,
+    });
+
+    console.log("Access token refreshed successfully.");
+  };
+
+  //__________________________________________________Input functions
 
   const handleUserChange = (event) => {
     const value = event.currentTarget.value;
-
     setUserName(value);
   };
+
   const handlePasswordChange = (event) => {
     const value = event.currentTarget.value;
     setPassword(value);
   };
 
+  const handleCategoryInput = (event) => {
+    const value = event.currentTarget.value;
+    setNewCategory(value);
+  };
+
+  //__________________________________________________User functions
+
   async function addUser(event) {
     event.preventDefault();
 
+    // Check empty fields
     if (userName === "") {
       document.getElementsByClassName("inputName")[0].placeholder =
         "Entrer un Nom";
       return;
     }
-
     if (password === "") {
       document.getElementsByClassName("inputPassword")[0].placeholder =
         "Entrer un mdp";
       return;
     }
 
-    //Check if user already exists
-    const response = await Axios.post(`${localHost}apiroutes/user`, {
+    // API Request
+    const response = await Axios.post(`${basePath}/user`, {
       name: userName,
       password: password,
     });
+
     if (response.data) {
       setUserObject({
         name: response.data.name,
         password: response.data.password,
         id: response.data.id,
-        token: response.data.accessToken,
+        AT: response.data.accessToken,
+        RT: response.data.refreshToken,
       });
       localStorage.setItem("username", userName);
       localStorage.setItem("password", password);
-      localStorage.setItem("token", response.data.accessToken);
     } else {
       document.getElementsByClassName("inputName")[0].placeholder =
         "Existe déjà !";
       document.getElementsByClassName("inputPassword")[0].placeholder = "";
     }
+
     setPassword("");
     setUserName("");
   }
 
   const logoutUser = (event) => {
-    setUserObject({
-      name: "",
-      password: "",
-      id: 0,
-      token: "",
-    });
+    //remove RT from DB
+    setUserObject({});
     localStorage.clear();
   };
 
   async function logUser(event) {
     event.preventDefault();
 
-    const response = await Axios.post(`${localHost}apiroutes/user/login`, {
+    const response = await Axios.post(`${basePath}/user/login`, {
       name: userName,
       password: password,
     });
@@ -118,22 +142,17 @@ export const App = () => {
     } else {
       setUserObject({
         name: response.data.name,
-        password: response.data.password,
         id: response.data.id,
-        token: response.data.accessToken,
+        AT: response.data.accessToken,
+        RT: response.data.refreshToken,
       });
+
       localStorage.setItem("username", userName);
       localStorage.setItem("password", password);
-      localStorage.setItem("token", response.data.accessToken);
     }
   }
 
   //__________________________________________________Category functions
-
-  const handleCategoryInput = (event) => {
-    const value = event.currentTarget.value;
-    setNewCategory(value);
-  };
 
   async function addCategory(event) {
     event.preventDefault();
@@ -141,32 +160,47 @@ export const App = () => {
     if (newCategory === "") {
       document.getElementsByClassName("inputCategory")[0].placeholder =
         "Entrer une catégorie";
-    } else if (isLocalToken && userObject.token === tokenLocalStorage) {
-      const response = await Axios.post(`${localHost}apiroutes/category`, {
-        name: newCategory,
-        userId: userObject.id,
-        token: userObject.token,
+      return;
+    }
+
+    await Axios.post(`${basePath}/category`, {
+      name: newCategory,
+      userId: userObject.id,
+    })
+      .catch((error) => {
+        console.log("Access token expired.");
+      })
+      .then((response) => {
+        if (!response) return getNewToken();
+
+        setCategories([
+          ...categories,
+          {
+            id: response.data.id,
+            name: response.data.name,
+          },
+        ]);
       });
-      setCategories([
-        ...categories,
-        {
-          id: response.data.id,
-          name: response.data.name,
-        },
-      ]);
-      setNewCategory("");
-      document.getElementsByClassName("inputCategory")[0].placeholder = "";
-    } else return logoutUser()
+
+    setNewCategory("");
+    document.getElementsByClassName("inputCategory")[0].placeholder = "";
   }
 
   async function deleteCategory(categoryId) {
-    await Axios.delete(`${localHost}apiroutes/category/${categoryId}`);
+    await Axios.delete(`${basePath}/categories/${categoryId}`)
+      .catch((error) => {
+        console.log("Access token expired.");
+      })
+      .then((response) => {
+        if (!response) return getNewToken();
+      });
 
     setCategories(categories.filter((item) => item.id !== categoryId));
   }
 
-  // Render
-  if (userObject.name !== "")
+  //__________________________________________________Render
+
+  if (userObject.AT)
     return (
       <div className="App">
         <button onClick={logoutUser} className="logout">
@@ -174,7 +208,11 @@ export const App = () => {
         </button>
         {categories.map((category) => (
           <div key={category.id}>
-            <Tasks category={category} onDeleteCategory={deleteCategory} />
+            <Tasks
+              category={category}
+              onDeleteCategory={deleteCategory}
+              onExpiredAT={getNewToken}
+            />
           </div>
         ))}
         <form className="form formCategory">

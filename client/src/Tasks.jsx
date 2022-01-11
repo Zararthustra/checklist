@@ -3,17 +3,18 @@ import Axios from "axios";
 import icon from "./assets/delete.png";
 import "./App.css";
 
-export const Tasks = ({ category, onDeleteCategory }) => {
-  // Variables
+export const Tasks = ({ category, onDeleteCategory, onExpiredAT }) => {
+  //__________________________________________________Set up
+
   const dev = false;
-  const localHost = dev ? "http://localhost:3001/" : "/";
+  const basePath = dev ? "http://192.168.1.6:3001/apiroutes" : "/";
 
   const [tasks, setTasks] = useState([]);
   const [taskInput, setTaskInput] = useState("");
 
   // Load data when mounting
   useEffect(() => {
-    Axios.get(`${localHost}apiroutes/${category.id}/task`).then((res) => {
+    Axios.get(`${basePath}/${category.id}/tasks`).then((res) => {
       const tasksArray = res.data;
       setTasks(tasksArray);
 
@@ -24,19 +25,27 @@ export const Tasks = ({ category, onDeleteCategory }) => {
         return (item.style.backgroundColor = "#" + randomColor);
       });
     });
-  }, [category, localHost]);
+  }, [category, basePath]);
 
-  // Functions
-
-  const deleteTask = (taskId) => {
-    Axios.delete(`${localHost}apiroutes/task/${taskId}`).then(() => {
-      setTasks(tasks.filter((item) => item.id !== taskId));
-    });
-  };
+  //__________________________________________________Functions
 
   const handleTaskChange = (event) => {
     const value = event.currentTarget.value;
     setTaskInput(value);
+  };
+
+  const deleteTask = async (taskId) => {
+    if (window.navigator.vibrate) window.navigator.vibrate([100, 30, 100]);
+
+    await Axios.delete(`${basePath}/tasks/${taskId}`)
+      .catch((error) => {
+        console.log("Access token expired.");
+      })
+      .then((response) => {
+        if (!response) return onExpiredAT();
+
+        setTasks(tasks.filter((item) => item.id !== taskId));
+      });
   };
 
   async function addTask(event) {
@@ -46,22 +55,29 @@ export const Tasks = ({ category, onDeleteCategory }) => {
       for (let element of document.getElementsByClassName("inputTask"))
         element.placeholder = "Entrer un élément";
     } else {
-      const response = await Axios.post(`${localHost}apiroutes/task`, {
+      await Axios.post(`${basePath}/task`, {
         name: taskInput,
         categoryId: category.id,
-      });
-      setTasks([
-        ...tasks,
-        {
-          id: response.data.id,
-          name: response.data.name,
-        },
-      ]);
+      })
+        .catch((error) => {
+          console.log("Access token expired.");
+        })
+        .then((response) => {
+          if (!response) return onExpiredAT();
 
-      //Add random color to the tasks
-      const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-      let item = document.getElementById(response.data.id);
-      item.style.backgroundColor = "#" + randomColor;
+          setTasks([
+            ...tasks,
+            {
+              id: response.data.id,
+              name: response.data.name,
+            },
+          ]);
+
+          //Add random color to the tasks
+          const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+          let item = document.getElementById(response.data.id);
+          item.style.backgroundColor = "#" + randomColor;
+        });
 
       // Reset inputs
       setTaskInput("");
@@ -69,6 +85,8 @@ export const Tasks = ({ category, onDeleteCategory }) => {
         element.placeholder = "";
     }
   }
+
+  //__________________________________________________Render
 
   return (
     <div className="category">
