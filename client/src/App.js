@@ -120,7 +120,9 @@ export const App = () => {
   }
 
   const logoutUser = (event) => {
-    //remove RT from DB
+    Axios.post(`${basePath}/user/logout`, {
+      refreshToken: userObject.RT,
+    });
     setUserObject({});
     localStorage.clear();
   };

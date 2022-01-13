@@ -17,7 +17,7 @@ const ATSecret = process.env.ACCESS_TOKEN_SECRET;
 const RTSecret = process.env.REFRESH_TOKEN_SECRET;
 
 const createAccessToken = (user) => {
-  return jwt.sign(user, ATSecret, { expiresIn: "15s" });
+  return jwt.sign(user, ATSecret, { expiresIn: "1h" });
 };
 
 const authenticateAccessToken = (req, res, next) => {
@@ -60,7 +60,7 @@ const createRTinDB = (refreshToken) => {
 const deleteRTfromDB = (refreshToken) => {
   db.RefreshToken.destroy({
     where: { token: refreshToken },
-  }).then(() => res.sendStatus(204));
+  }).then((res) => console.log("RT deleted ? (1 = yes, 0 = no): ", res));
 };
 
 const retrieveRTfromDB = (refreshToken) => {
@@ -85,7 +85,7 @@ router.post("/user/login", (req, res) => {
     if (!userValidated) return res.send("Wrong credentials");
 
     const accessToken = createAccessToken({ userValidated });
-    const refreshToken = jwt.sign({ userValidated }, RTSecret);
+    const refreshToken = jwt.sign({ userValidated }, RTSecret, { expiresIn: "30d" });
     createRTinDB(refreshToken);
 
     res.send({
@@ -110,7 +110,7 @@ router.post("/user", (req, res) => {
     if (creationStatus[1]) {
       const userValidated = creationStatus[0];
       const accessToken = createAccessToken({ userValidated });
-      const refreshToken = jwt.sign({ userValidated }, RTSecret);
+      const refreshToken = jwt.sign({ userValidated }, RTSecret, { expiresIn: "30d" });
       createRTinDB(refreshToken);
 
       res.send({
@@ -123,6 +123,10 @@ router.post("/user", (req, res) => {
     } else res.send(creationStatus[1]);
   });
 });
+
+router.post("/user/logout", (req, res) => {
+  deleteRTfromDB(req.body.refreshToken)
+})
 
 // Private user queries
 const isAdmin = (req, res, next) => {
