@@ -1,4 +1,4 @@
-# [Checklist](https://checklist.arthurm.tech/)
+# [Checklist](https://checklist.arthurmayer.fr/)
 <b>
 <p align="center">
 Un petit projet full stack, simple et efficace,
