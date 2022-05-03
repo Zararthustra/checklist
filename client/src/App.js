@@ -7,7 +7,7 @@ export const App = () => {
   //__________________________________________________Set up
 
   const dev = false;
-  const basePath = dev ? "http://192.168.1.6:3001/apiroutes" : "/";
+  const basePath = dev ? "http://192.168.1.6:3001/apiroutes" : "/apiroutes";
 
   const [sessionExpired, setSessionExpired] = useState(false)
   const [categories, setCategories] = useState([]);

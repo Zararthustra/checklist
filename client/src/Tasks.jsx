@@ -7,7 +7,7 @@ export const Tasks = ({ category, onDeleteCategory, setSessionExpired }) => {
   //__________________________________________________Set up
 
   const dev = false;
-  const basePath = dev ? "http://192.168.1.6:3003/apiroutes" : "/";
+  const basePath = dev ? "http://192.168.1.6:3003/apiroutes" : "/apiroutes";
 
   const [tasks, setTasks] = useState([]);
   const [taskInput, setTaskInput] = useState("");
