@@ -207,6 +207,11 @@ router.post("/task", authenticateAccessToken, (req, res) => {
   }).then((addedTask) => res.json(addedTask));
 });
 
+// Create bulk
+router.post("/tasks", authenticateAccessToken, (req, res) => {
+  db.Task.bulkCreate(req.body).then((addedTasks) => res.json(addedTasks));
+});
+
 // Delete
 router.delete("/tasks/:taskId", authenticateAccessToken, (req, res) => {
   db.Task.destroy({

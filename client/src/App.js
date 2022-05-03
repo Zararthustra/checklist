@@ -9,6 +9,7 @@ export const App = () => {
   const dev = false;
   const basePath = dev ? "http://192.168.1.6:3001/apiroutes" : "/";
 
+  const [sessionExpired, setSessionExpired] = useState(false)
   const [categories, setCategories] = useState([]);
   const [userObject, setUserObject] = useState({});
   //    Inputs
@@ -57,6 +58,7 @@ export const App = () => {
     });
 
     console.log("Access token refreshed successfully.");
+    setSessionExpired(false);
   };
 
   //__________________________________________________Input functions
@@ -173,7 +175,7 @@ export const App = () => {
         console.log("Access token expired.");
       })
       .then((response) => {
-        if (!response) return getNewToken();
+        if (!response) return setSessionExpired(true);
 
         setCategories([
           ...categories,
@@ -182,10 +184,10 @@ export const App = () => {
             name: response.data.name,
           },
         ]);
+        document.getElementsByClassName("inputCategory")[0].placeholder = "";
       });
 
     setNewCategory("");
-    document.getElementsByClassName("inputCategory")[0].placeholder = "";
   }
 
   async function deleteCategory(categoryId) {
@@ -194,13 +196,21 @@ export const App = () => {
         console.log("Access token expired.");
       })
       .then((response) => {
-        if (!response) return getNewToken();
+        if (!response) return setSessionExpired(true);
       });
 
     setCategories(categories.filter((item) => item.id !== categoryId));
   }
 
   //__________________________________________________Render
+
+  if (sessionExpired) return (
+      <div className="refreshSessionWindow">
+        <h2 className="connexion">Session expirée</h2>
+        <p>Veuillez vous reconnecter</p>
+        <div className="login" onClick={getNewToken}>Se reconnecter</div>
+      </div>
+  )
 
   if (userObject.AT)
     return (
@@ -213,7 +223,7 @@ export const App = () => {
             <Tasks
               category={category}
               onDeleteCategory={deleteCategory}
-              onExpiredAT={getNewToken}
+              setSessionExpired={setSessionExpired}
             />
           </div>
         ))}

@@ -3,11 +3,11 @@ import Axios from "axios";
 import icon from "./assets/delete.png";
 import "./App.css";
 
-export const Tasks = ({ category, onDeleteCategory, onExpiredAT }) => {
+export const Tasks = ({ category, onDeleteCategory, setSessionExpired }) => {
   //__________________________________________________Set up
 
   const dev = false;
-  const basePath = dev ? "http://192.168.1.6:3001/apiroutes" : "/";
+  const basePath = dev ? "http://192.168.1.6:3003/apiroutes" : "/";
 
   const [tasks, setTasks] = useState([]);
   const [taskInput, setTaskInput] = useState("");
@@ -25,6 +25,7 @@ export const Tasks = ({ category, onDeleteCategory, onExpiredAT }) => {
         return (item.style.backgroundColor = "#" + randomColor);
       });
     });
+    return setTasks([])
   }, [category, basePath]);
 
   //__________________________________________________Functions
@@ -42,7 +43,7 @@ export const Tasks = ({ category, onDeleteCategory, onExpiredAT }) => {
         console.log("Access token expired.");
       })
       .then((response) => {
-        if (!response) return onExpiredAT();
+        if (!response) return setSessionExpired(true);
 
         setTasks(tasks.filter((item) => item.id !== taskId));
       });
@@ -63,7 +64,7 @@ export const Tasks = ({ category, onDeleteCategory, onExpiredAT }) => {
           console.log("Access token expired.");
         })
         .then((response) => {
-          if (!response) return onExpiredAT();
+          if (!response) return setSessionExpired(true);
 
           setTasks([
             ...tasks,
