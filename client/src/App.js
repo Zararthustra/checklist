@@ -205,21 +205,20 @@ export const App = () => {
   //__________________________________________________Render
 
   if (sessionExpired) return (
-      <div className="refreshSessionWindow">
-        <h2 className="connexion">Session expirée</h2>
-        <p>Veuillez vous reconnecter</p>
-        <div className="login" onClick={getNewToken}>Se reconnecter</div>
-      </div>
+    <div className="refreshSessionWindow">
+      <h2 className="connexion">Session expirée</h2>
+      <p>Veuillez vous reconnecter</p>
+      <div className="login" onClick={getNewToken}>Se reconnecter</div>
+    </div>
   )
 
   if (userObject.AT)
     return (
       <div className="App">
-        <button onClick={logoutUser} className="logout">
-          Deconnecter
-        </button>
+        <img src={require("./assets/logout.png").default} onClick={logoutUser} className="logout" alt="Se déconnecter" title="Se déconnecter" />
         {categories.map((category) => (
           <div key={category.id}>
+
             <Tasks
               category={category}
               onDeleteCategory={deleteCategory}

@@ -83,15 +83,10 @@ input:focus {
 }
 
 .logout {
-  box-shadow: 3px 3px 10px -5px black;
-  font-weight: bolder;
   margin: 1em 0 1.5em;
-  color: #9fe6ff;
   border: none;
   cursor: pointer;
-  padding: 0.4em 2.5em;
-  border-radius: 25px;
-  background-color: rgb(161, 12, 12);
+  width: 3em;
 }
 
 .delete {
