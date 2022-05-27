@@ -206,9 +206,9 @@ export const App = () => {
 
   if (sessionExpired) return (
     <div className="refreshSessionWindow">
-      <h2 className="connexion">Session expirée</h2>
+      <h2 className="reconnect">Session expirée</h2>
       <p>Veuillez vous reconnecter</p>
-      <div className="login" onClick={getNewToken}>Se reconnecter</div>
+      <div className="loginReco" onClick={getNewToken}>Se reconnecter</div>
     </div>
   )
 
@@ -244,7 +244,9 @@ export const App = () => {
   else
     return (
       <div className="logApp">
-        <h1 className="connexion">Connexion</h1>
+        <h1 className="connexion">
+          <span className="first-letter">C</span>
+          hecklist</h1>
         <form className="logform">
           <div className="inputs">
             <input

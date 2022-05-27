@@ -1,25 +1,138 @@
+@media all and (max-width: 500px) {
+  .logApp {
+    top: 0 !important;
+    padding: 4em 0;
+    width: 90vw !important;
+    height: 90vh;
+    justify-content: space-between !important;
+  }
+
+  .connexion {
+    font-size: 20vw;
+    margin: 0 !important;
+  }
+
+  .logform {
+    width: 90%;
+    height: 70%;
+    display: flex;
+    justify-content: space-between;
+    gap: 4em;
+    flex-direction: column;
+  }
+
+  .inputs {
+    padding: 3em 0 !important;
+    gap: 3em !important;
+  }
+
+  .inputName,
+  .inputPassword {
+    color: #202036;
+    height: 2em;
+    font-size: 2em;
+  }
+
+  .loginDiv {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.2em !important;
+  }
+
+  .login,
+  .register {
+    font-size: 7vw;
+    margin: 0 !important;
+  }
+}
+
 /*
 ** logApp
 */
 .logApp {
   top: 40vh;
   position: relative;
-  padding: 2em 0em;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+
+}
+
+.inputs input {
+  align-self: center;
+  width: 80%;
+}
+
+.inputs {
   border: solid 1px #9fe6ff;
   border-radius: 10px;
-  background-color: rgb(32, 32, 54);
+  padding: 2em 0em;
+  background-color: #202036;
   box-shadow: 1em 1em 6em 1em #f72585, 0em 0em 0.5em 0em #e1fbff,
     -1em -1em 5em 1em #3a0ca3;
 }
+
+
+.first-letter {
+  color: #3a0ca3;
+  text-shadow: none !important;
+  animation: rainbowLines 2s step-start infinite;
+}
+
+@keyframes rainbowLines {
+
+  0% {
+    color: #a80000;
+  }
+  10% {
+    color: #a2ff00;
+  }
+  20% {
+    color: #c225c2;
+  }
+  30% {
+    color: #2194ab;
+  }
+  40% {
+    color: #00c843;
+  }
+  50% {
+    color: #575757;
+  }
+  60% {
+    color: #d18100;
+  }
+  70% {
+    color: #1c5d9d;
+  }
+  80% {
+    color: #dd0037;
+  }
+  90% {
+    color: #02a512;
+  }
+  100% {
+    color: #7600eb;
+  }
+}
+
 .connexion {
+  z-index: 1;
   color: #9fe6ff;
+  text-shadow: 0em 0em 10px #e1fbff;
   padding: 0px;
   margin: 0em 1em 1em;
 }
+.reconnect {
+  z-index: 1;
+  color: #9fe6ff;
+  text-shadow: 0em 0em 10px #e1fbff;
+  padding: 0px;
+  margin: 0em 1em 1em;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -28,6 +141,7 @@
   text-align: center;
   justify-content: center;
 }
+
 input {
   border: 1px solid #9fe6ff;
   background-color: rgb(238, 238, 238);
@@ -35,9 +149,11 @@ input {
   outline: none;
   padding: 3px;
 }
+
 input:focus {
   border: 1px solid blue;
 }
+
 .inputs {
   display: flex;
   flex-direction: column;
@@ -49,6 +165,7 @@ input:focus {
   justify-content: center;
   gap: 1em;
 }
+
 .login {
   box-shadow: 3px 3px 10px -5px black;
   font-weight: bolder;
@@ -60,6 +177,18 @@ input:focus {
   padding: 0.4em 1em;
   border-radius: 25px;
 }
+.loginReco {
+  box-shadow: 3px 3px 10px -5px black;
+  font-weight: bolder;
+  margin-top: 1em;
+  color: #9fe6ff;
+  background-color: #3a0ca3;
+  border: none;
+  cursor: pointer;
+  padding: 0.4em 1em;
+  border-radius: 25px;
+}
+
 .register {
   box-shadow: 3px 3px 10px -5px black;
   font-weight: bolder;
@@ -71,6 +200,7 @@ input:focus {
   padding: 0.4em 1em;
   border-radius: 25px;
 }
+
 /*
 ** App
 */
@@ -94,6 +224,7 @@ input:focus {
   width: 25px;
   height: 25px;
 }
+
 .catimg {
   display: flex;
   flex-wrap: wrap;
@@ -103,6 +234,7 @@ input:focus {
   gap: 1em;
   margin: 0 1em;
 }
+
 .category {
   margin: 1em 0 1em;
   display: flex;
@@ -111,6 +243,7 @@ input:focus {
   flex-direction: column;
   width: 100vw;
 }
+
 .categoryName {
   text-decoration: underline;
   color: #dbdedf;
@@ -122,10 +255,12 @@ input:focus {
   margin: 2em 0;
   width: 90%;
 }
+
 .inputCategory {
   border-radius: 5px 5px 0 0;
   padding: 0.5em;
 }
+
 .addCategory {
   font-weight: bolder;
   margin: 0;
@@ -148,14 +283,17 @@ input:focus {
   text-align: center;
   width: 90%;
 }
+
 .task:nth-child(1) {
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
 }
+
 .task:nth-last-child(1) {
   border-bottom-right-radius: 25px;
   border-bottom-left-radius: 25px;
 }
+
 .task {
   box-shadow: 0px 0px 50px -10px white;
   padding: 1.3em 0.5em;
@@ -173,9 +311,11 @@ input:focus {
   width: 90%;
   box-shadow: 3px 3px 25px -7px black;
 }
+
 .inputTask {
   border-radius: 5px 5px 0 0;
 }
+
 .addTask {
   font-weight: bolder;
   margin: 0;
