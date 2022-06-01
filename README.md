@@ -15,7 +15,7 @@ pour ne pas oublier ce qu'il reste à faire !
 </p>
 
 
-__Technologies utilisée:__
+__Technologies utilisées:__
 
 * React
 * Axios
