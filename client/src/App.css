@@ -1,7 +1,7 @@
 @media all and (max-width: 500px) {
   .logApp {
     top: 0 !important;
-    padding: 4em 0;
+    padding: 1em 0;
     width: 90vw !important;
     height: 90vh;
     justify-content: space-between !important;
@@ -21,18 +21,17 @@
     flex-direction: column;
   }
 
-  .inputs {
-    padding: 3em 0 !important;
-    gap: 3em !important;
-  }
-
   .inputName,
   .inputPassword {
     color: #202036;
     height: 2em;
     font-size: 2em;
+    padding-left: .5em;
   }
 
+.logform label {
+  font-size: 1.7em;
+}
   .loginDiv {
     display: flex;
     justify-content: center;
@@ -74,6 +73,18 @@
     -1em -1em 5em 1em #3a0ca3;
 }
 
+.inputs {
+  padding: 2em 0 !important;
+  gap: 1em !important;
+}
+
+.logform label {
+  color: white;
+  padding-left: .5em;
+  margin-left: 1em;
+  font-weight: bold;
+  border-left: 5px solid #3a0ca3;
+}
 
 .first-letter {
   color: #3a0ca3;
@@ -86,33 +97,43 @@
   0% {
     color: #a80000;
   }
+
   10% {
     color: #a2ff00;
   }
+
   20% {
     color: #c225c2;
   }
+
   30% {
     color: #2194ab;
   }
+
   40% {
     color: #00c843;
   }
+
   50% {
     color: #575757;
   }
+
   60% {
     color: #d18100;
   }
+
   70% {
     color: #1c5d9d;
   }
+
   80% {
     color: #dd0037;
   }
+
   90% {
     color: #02a512;
   }
+
   100% {
     color: #7600eb;
   }
@@ -125,6 +146,7 @@
   padding: 0px;
   margin: 0em 1em 1em;
 }
+
 .reconnect {
   z-index: 1;
   color: #9fe6ff;
@@ -177,6 +199,7 @@ input:focus {
   padding: 0.4em 1em;
   border-radius: 25px;
 }
+
 .loginReco {
   box-shadow: 3px 3px 10px -5px black;
   font-weight: bolder;

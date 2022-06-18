@@ -249,17 +249,21 @@ export const App = () => {
           hecklist</h1>
         <form className="logform">
           <div className="inputs">
+            <label htmlFor="pseudo">Pseudo</label>
             <input
               maxLength="20"
-              placeholder="Nom"
+              name="pseudo"
+              id="pseudo"
               className="inputName"
               type="text"
               value={userName}
               onChange={handleUserChange}
             ></input>
+            <label htmlFor="password">Mot de passe</label>
             <input
               maxLength="20"
-              placeholder="Mot de passe"
+              name="password"
+              id="password"
               className="inputPassword"
               type="password"
               value={password}
